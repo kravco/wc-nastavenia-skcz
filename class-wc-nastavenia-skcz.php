@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class WC_Nastavenia_SKCZ {
+class Plugin {
 	const PREFIX = 'wc_nastavenia_skcz_';
 	const BILLING_AS_COMPANY_KEY = 'wc_nastavenia_skcz_billing_as_company';
 
@@ -22,7 +22,7 @@ class WC_Nastavenia_SKCZ {
 	}
 
 	/** @constructor */
-	public function __construct() {
+	protected function __construct() {
 		add_action( 'init', [ $this, 'init' ], 20, 0 );
 		add_action( 'admin_init', [ $this, 'admin_init' ], 20, 0 );
 	}
@@ -294,13 +294,16 @@ class WC_Nastavenia_SKCZ {
 		if ( is_numeric( $order ) ) {
 			$order = wc_get_order( $order );
 		}
-		if ( ! $order instanceof WC_Abstract_Order ) {
+		if ( ! $order instanceof \WC_Abstract_Order ) {
 			return null;
 		}
+
 		$billing_as_company = $order->get_meta( '_' . static::BILLING_AS_COMPANY_KEY );
 		$company_vat_id = $order->get_meta( '_' . static::PREFIX . 'billing_company_vat_id' );
 		$company_id = $order->get_meta( '_' . static::PREFIX . 'billing_company_id' );
 		$company_tax_id = $order->get_meta( '_' . static::PREFIX . 'billing_company_tax_id' );
+
+		require_once __DIR__ . '/class-customer-details.php';
 
 		return new Customer_Details( $billing_as_company, $company_vat_id, $company_id, $company_tax_id );
 	}

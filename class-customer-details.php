@@ -20,7 +20,12 @@ class Customer_Details {
 		$this->company_tax_id = strval( $company_tax_id );
 	}
 
+	/** convenient alias */
 	public function is_billing_as_company() {
+		return $this->get_billing_as_company();
+	}
+
+	public function get_billing_as_company() {
 		return $this->billing_as_company;
 	}
 

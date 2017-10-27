@@ -39,6 +39,9 @@ Je pravdepodobné, že pluginy nie sú kompatibilné. Skúste zistiť, v čom sp
 
 == Changelog ==
 
+= 1.0.1 =
+* Oprava chýb
+
 = 1.0 =
 * Vydanie prvej verzie pluginu
 

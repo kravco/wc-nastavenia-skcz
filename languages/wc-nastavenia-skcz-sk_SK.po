@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-10-23 23:52+0200\n"
-"PO-Revision-Date: 2017-10-23 23:52+0200\n"
+"POT-Creation-Date: 2017-10-27 15:30+0200\n"
+"PO-Revision-Date: 2017-10-27 15:30+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: class-wc-nastavenia-skcz.php:72 class-wc-nastavenia-skcz.php:340
+#: class-wc-nastavenia-skcz.php:72 class-wc-nastavenia-skcz.php:343
 msgid "Buy as a company"
 msgstr "Nákup na firmu / živnosť"
 
@@ -23,18 +23,18 @@ msgstr "Nákup na firmu / živnosť"
 msgid "Type of buying"
 msgstr "Druh nákupu"
 
-#: class-wc-nastavenia-skcz.php:314
+#: class-wc-nastavenia-skcz.php:317
 msgid "VAT ID"
 msgstr "IČ DPH"
 
-#: class-wc-nastavenia-skcz.php:320
+#: class-wc-nastavenia-skcz.php:323
 msgid "ID"
 msgstr "IČO"
 
-#: class-wc-nastavenia-skcz.php:326
+#: class-wc-nastavenia-skcz.php:329
 msgid "Tax ID"
 msgstr "DIČ"
 
-#: class-wc-nastavenia-skcz.php:339
+#: class-wc-nastavenia-skcz.php:342
 msgid "Buy as a private person"
 msgstr "Nákup ako fyzická osoba"
