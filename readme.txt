@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: checkout, company, vat, slovakia
 Requires at least: 4.4
 Tested up to: 4.8.2
-WC tested up to: 3.2.1
+WC tested up to: 3.2.5
 Requires PHP: 5.5
 Stable tag: trunk
 License: GPLv2 or later
@@ -38,6 +38,9 @@ Je pravdepodobné, že pluginy nie sú kompatibilné. Skúste zistiť, v čom sp
 2. Pokladňa pri nákupe na firmu – zobrazia sa dodatočné políčka.
 
 == Changelog ==
+
+= 1.1.0
+* Pridanie riešenia problému slovenské DIČ vs české DIČ; plugin pri zmene krajiny automaticky upraví popisky pri políčkach tak, aby nemiatli zákazníkov zo zahraničia: pre zákazníkov zo slovenska zobrazí IČ DPH, IČO i DIČ, z Česka len DIČ a IČO a pre ostatných len medzinárodné "VAT ID"
 
 = 1.0.1 =
 * Oprava chýb

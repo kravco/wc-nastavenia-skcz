@@ -139,7 +139,7 @@ class Plugin {
 	 */
 	public function enqueue_billing_fields_scripts() {
 		if ( is_checkout() || is_account_page() ) {
-			wp_enqueue_script( 'wc-nastavenia-skcz', plugin_dir_url( __FILE__ ) . 'js/wc-nastavenia-skcz.js', [ 'jquery' ], '1.0' );
+			wp_enqueue_script( 'wc-nastavenia-skcz', plugin_dir_url( __FILE__ ) . 'js/wc-nastavenia-skcz.js', [ 'jquery' ], '1.1.0' );
 		}
 	}
 
