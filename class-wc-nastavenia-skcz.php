@@ -145,16 +145,18 @@ class Plugin {
 
 	/**
 	 * Add placeholder for custom company information into country address template.
-	 * For now it supports single country SK (Slovakia).
+	 * For now it supports only two countries: SK and CZ (Slovakia and Czech Republic).
 	 */
 	public function filter_country_address_formats( $formats ) {
 		if ( ! isset( $formats['SK'] ) ) {
-			if ( ! isset( $formats['default'] ) ) {
-				return $formats;
-			}
 			$formats['SK'] = $formats['default'];
 		}
+		if ( ! isset( $formats['CZ'] ) ) {
+			$formats['CZ'] = $formats['default'];
+		}
 		$formats['SK'] .= "\n{" . static::BILLING_AS_COMPANY_KEY . "}";
+		$formats['CZ'] .= "\n{" . static::BILLING_AS_COMPANY_KEY . "}";
+
 		return $formats;
 	}
 

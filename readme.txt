@@ -39,6 +39,9 @@ Je pravdepodobné, že pluginy nie sú kompatibilné. Skúste zistiť, v čom sp
 
 == Changelog ==
 
+= 1.1.1
+* Opravené zobrazovanie českého IČO a DIČ vo fakturačnej adrese
+
 = 1.1.0
 * Pridanie riešenia problému slovenské DIČ vs české DIČ; plugin pri zmene krajiny automaticky upraví popisky pri políčkach tak, aby nemiatli zákazníkov zo zahraničia: pre zákazníkov zo slovenska zobrazí IČ DPH, IČO i DIČ, z Česka len DIČ a IČO a pre ostatných len medzinárodné "VAT ID"
 
