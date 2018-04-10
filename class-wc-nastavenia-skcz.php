@@ -305,9 +305,24 @@ class Plugin {
 		$company_id = $order->get_meta( '_' . static::PREFIX . 'billing_company_id' );
 		$company_tax_id = $order->get_meta( '_' . static::PREFIX . 'billing_company_tax_id' );
 
+		if ( '' === "$billing_as_company$company_vat_id$company_id$company_tax_id" ) {
+			// try fallback meta fields from SuperFaktura/Webikon Invoice plugin
+			$company_vat_id = $order->get_meta( 'billing_company_wi_vat' );
+			$company_id = $order->get_meta( 'billing_company_wi_id' );
+			$company_tax_id = $order->get_meta( 'billing_company_wi_tax' );
+			// this field is not saved, we have to guess it
+			$billing_as_company = '' !== "$company_vat_id$company_id$company_tax_id";
+		}
+
+		$billing = apply_filters( 'wc_nastavenia_skcz_customer_details_billing', [
+			'company_vat_id' => $company_vat_id,
+			'company_id' => $company_id,
+			'company_tax_id' => $company_tax_id,
+		], $order );
+
 		require_once __DIR__ . '/class-customer-details.php';
 
-		return new Customer_Details( $billing_as_company, $company_vat_id, $company_id, $company_tax_id );
+		return new Customer_Details( $billing_as_company, $billing['company_vat_id'], $billing['company_id'], $billing['company_tax_id'] );
 	}
 
 	/**

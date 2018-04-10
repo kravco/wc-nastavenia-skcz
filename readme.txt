@@ -39,6 +39,9 @@ Je pravdepodobné, že pluginy nie sú kompatibilné. Skúste zistiť, v čom sp
 
 == Changelog ==
 
+= 1.2.0
+* Pridanie spatnej kompatibility pre pluginy SuperFaktúra a Webikon Fakturácia -- plugin rozpozná IČO, DIČ a IČ DPH vytvorené aj týmito pluginmi
+
 = 1.1.1
 * Opravené zobrazovanie českého IČO a DIČ vo fakturačnej adrese
 
