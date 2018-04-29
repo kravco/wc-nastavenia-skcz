@@ -1,4 +1,4 @@
-=== Nastavenia SK pre WooCommerce ===
+=== Nastavenia SK/CZ pre WooCommerce ===
 Contributors: webikon, kravco
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HJMDR4AEQNDME
 Tags: checkout, company, vat, slovakia

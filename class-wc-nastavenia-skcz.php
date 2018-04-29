@@ -78,7 +78,7 @@ class Plugin {
 		foreach ( static::get_additional_fields() as $key => $info ) {
 			$insert[ $key ] = [
 				'type' => 'text',
-				'label' => $info['label'],
+				'label' => $info['label'], // this label gets replaced by javascript
 				'class' => [ $info['class'] ],
 				'priority' => $info['priority'],
 			];
@@ -175,11 +175,12 @@ class Plugin {
 	 */
 	public function filter_order_billing_address( $args, $order ) {
 		if ( $order->get_meta( '_' . static::BILLING_AS_COMPANY_KEY ) ) {
+			$country = $order->get_billing_country();
 			$additional_info = [];
 			foreach ( static::get_additional_fields() as $key => $info ) {
 				$value = $order->get_meta( "_$key" );
 				if ( ! empty( $value ) ) {
-					$additional_info[] = $info['label'] . ': ' . $value;
+					$additional_info[] = static::get_additional_field_info( $country, $info, $value );
 				}
 			}
 			$args[ static::BILLING_AS_COMPANY_KEY ] = implode( "\n", $additional_info );
@@ -210,11 +211,12 @@ class Plugin {
 		$customer = new \WC_Customer( $user_id );
 		if ( 'billing' === $address_type ) {
 			if ( $customer->get_meta( static::BILLING_AS_COMPANY_KEY ) ) {
+				$country = $customer->get_billing_country();
 				$additional_info = [];
 				foreach ( static::get_additional_fields() as $key => $info ) {
 					$value = $customer->get_meta( $key );
 					if ( ! empty( $value ) ) {
-						$additional_info[] = $info['label'] . ': ' . $value;
+						$additional_info[] = static::get_additional_field_info( $country, $info, $value );
 					}
 				}
 				$args[ static::BILLING_AS_COMPANY_KEY ] = implode( "\n", $additional_info );
@@ -331,24 +333,56 @@ class Plugin {
 	protected static function get_additional_fields() {
 		return [
 			static::PREFIX . 'billing_company_vat_id' => [
+				'name' =>  'VAT ID',
 				'label' => __( 'VAT ID', 'wc-nastavenia-skcz' ),
 				'class' => 'form-row-wide',
 				'wrapper_class' => '_billing_company_field',
 				'priority' => 46,
 			],
 			static::PREFIX . 'billing_company_id' => [
+				'name' => 'ID',
 				'label' => __( 'ID', 'wc-nastavenia-skcz' ),
 				'class' => 'form-row-first',
 				'wrapper_class' => '_billing_first_name_field',
 				'priority' => 47,
 			],				
 			static::PREFIX . 'billing_company_tax_id' => [
+				'name' => 'Tax ID',
 				'label' => __( 'Tax ID', 'wc-nastavenia-skcz' ),
 				'class' => 'form-row-last',
 				'wrapper_class' => '_billing_last_name_field',
 				'priority' => 48,
 			],
 		];	
+	}
+
+	/**
+	 * Get list of additional field info to append to address.
+	 */
+	protected static function get_additional_field_info( $country, $info, $value ) {
+		if ( is_admin() ) {
+			$label = $info['label'];
+		}
+		else {
+			$label = static::get_country_field_label( $country, $info['name'] );
+		}
+		return "$label: $value";
+	}
+
+	/**
+	 * Get list of additional field name for country.
+	 */
+	protected static function get_country_field_label( $country, $field ) {
+		$fields = [ 'VAT ID' => 'VAT_ID', 'ID' => 'ID', 'Tax ID' => 'Tax ID' ];
+		switch ( $country ) {
+		case 'SK':
+			$fields = [ 'VAT ID' => 'IČ DPH', 'ID' => 'IČO', 'Tax ID' => 'DIČ' ];
+			break;
+		case 'CZ':
+			$fields = [ 'VAT ID' => 'DIČ', 'ID' => 'IČO' ];
+			break;
+		}
+		return isset( $fields[ $field ] ) ? $fields[ $field ] : null;
 	}
 
 	/**
