@@ -329,18 +329,20 @@ class Plugin {
 	}
 
 	/**
-	 * Get meta data (we can filter this later).
+	 * Get meta data (we can filter this).
 	 */
 	protected static function get_meta( $data, $key ) {
 		$key = ( $data instanceof \WC_Order ? '_' : '' ) . static::PREFIX . $key;
-		return $data->get_meta( $key );
+		$value = $data->get_meta( $key );
+		return apply_filters( static::PREFIX . 'get_meta_' . $key, $value );
 	}
 
 	/**
-	 * Update meta data (we can filter this later).
+	 * Update meta data (we can filter this).
 	 */
 	protected static function update_meta( $data, $key, $value ) {
 		$key = ( $data instanceof \WC_Order ? '_' : '' ) . static::PREFIX . $key;
+		$value = apply_filters( static::PREFIX . 'update_meta_' . $key, $value );
 		$data->update_meta_data( $key, $value );
 	}
 
