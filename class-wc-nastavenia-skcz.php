@@ -148,15 +148,12 @@ class Plugin {
 	 * For now it supports only two countries: SK and CZ (Slovakia and Czech Republic).
 	 */
 	public function filter_country_address_formats( $formats ) {
-		if ( ! isset( $formats['SK'] ) ) {
-			$formats['SK'] = $formats['default'];
+		foreach ( WC()->countries->get_european_union_countries( 'eu_vat' ) as $code ) {
+			if ( ! isset( $formats[ $code ] ) ) {
+				$formats[ $code ] = $formats['default'];
+			}
+			$formats[ $code ] .= "\n{" . static::BILLING_AS_COMPANY_KEY . "}";
 		}
-		if ( ! isset( $formats['CZ'] ) ) {
-			$formats['CZ'] = $formats['default'];
-		}
-		$formats['SK'] .= "\n{" . static::BILLING_AS_COMPANY_KEY . "}";
-		$formats['CZ'] .= "\n{" . static::BILLING_AS_COMPANY_KEY . "}";
-
 		return $formats;
 	}
 
