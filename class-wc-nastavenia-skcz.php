@@ -9,7 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Plugin {
 	const PREFIX = 'wc_nastavenia_skcz_';
-	const BILLING_AS_COMPANY_KEY = 'wc_nastavenia_skcz_billing_as_company';
+	const BILLING_AS_COMPANY_KEY = 'billing_as_company';
+	const PREFIXED_BILLING_AS_COMPANY_KEY = 'wc_nastavenia_skcz_billing_as_company';
 	const ADDRESS_FORMAT_KEY = 'wc_nastavenia_skcz_additional_fields';
 
 	private static $instance;
@@ -73,7 +74,7 @@ class Plugin {
 			return $fields;
 		}
 		$insert = [
-			static::BILLING_AS_COMPANY_KEY => [
+			static::PREFIXED_BILLING_AS_COMPANY_KEY => [
 				'type' => 'checkbox',
 				'label' => __( 'Buy as a company', 'wc-nastavenia-skcz' ),
 				'class' => [ 'form-row-wide' ],
@@ -82,7 +83,7 @@ class Plugin {
 			'billing_company' => [ 'priority' => 45 ] + $fields['billing_company'],
 		];
 		foreach ( static::get_additional_fields() as $key => $info ) {
-			$insert[ $key ] = [
+			$insert[ static::PREFIX . $key ] = [
 				'type' => 'text',
 				'label' => $info['label'], // this label gets replaced by javascript
 				'class' => [ $info['class'] ],
@@ -110,7 +111,7 @@ class Plugin {
 	 * Save additional order billing fields at checkout.
 	 */
 	public function save_order_billing_fields( $order, $data ) {
-		if ( empty( $data[ static::BILLING_AS_COMPANY_KEY ] ) ) {
+		if ( empty( $data[ static::PREFIXED_BILLING_AS_COMPANY_KEY ] ) ) {
 			static::update_meta( $order, static::BILLING_AS_COMPANY_KEY, '0' );
 			foreach ( static::get_additional_fields() as $key => $info ) {
 				static::update_meta( $order, $key, '' );
@@ -119,7 +120,7 @@ class Plugin {
 		}
 		static::update_meta( $order, static::BILLING_AS_COMPANY_KEY, '1' );
 		foreach ( static::get_additional_fields() as $key => $info ) {
-			static::update_meta( $order, $key, $data[ $key ] );
+			static::update_meta( $order, $key, $data[ static::PREFIX . $key ] );
 		}
 	}
 
@@ -127,7 +128,7 @@ class Plugin {
 	 * Save additional customer billing fields at checkout.
 	 */
 	public function save_customer_billing_fields( $customer, $data ) {
-		if ( empty( $data[ static::BILLING_AS_COMPANY_KEY ] ) ) {
+		if ( empty( $data[ static::PREFIXED_BILLING_AS_COMPANY_KEY ] ) ) {
 			static::update_meta( $customer, static::BILLING_AS_COMPANY_KEY, '0' );
 			foreach ( static::get_additional_fields() as $key => $info ) {
 				static::update_meta( $customer, $key, '' );
@@ -136,7 +137,7 @@ class Plugin {
 		}
 		static::update_meta( $customer, static::BILLING_AS_COMPANY_KEY, '1' );
 		foreach ( static::get_additional_fields() as $key => $info ) {
-			static::update_meta( $customer, $key, $data[ $key ] );
+			static::update_meta( $customer, $key, $data[ static::PREFIX . $key ] );
 		}
 	}
 
@@ -242,8 +243,8 @@ class Plugin {
 			return $fields;
 		}
 		$insert = [
-			static::BILLING_AS_COMPANY_KEY => [
-				'id' => '_' . static::BILLING_AS_COMPANY_KEY,
+			static::PREFIXED_BILLING_AS_COMPANY_KEY => [
+				'id' => '_' . static::PREFIXED_BILLING_AS_COMPANY_KEY,
 				'label' => '',
 				'show' => false,
 				'type' => 'select',
@@ -253,8 +254,8 @@ class Plugin {
 			'company' => $fields['company'],
 		];
 		foreach ( static::get_additional_fields() as $key => $info ) {
-			$insert[ $key ] = [
-				'id' => "_$key",
+			$insert[ static::PREFIX . $key ] = [
+				'id' => '_' . static::PREFIX . $key,
 				'label' => $info['label'],
 				'wrapper_class' => $info['wrapper_class'],
 				'show' => false,
@@ -275,16 +276,17 @@ class Plugin {
 			return $fields;
 		}
 		$insert = [
-			static::BILLING_AS_COMPANY_KEY => [
+			static::PREFIXED_BILLING_AS_COMPANY_KEY => [
 				'label' => __( 'Type of buying', 'wc-nastavenia-skcz' ),
 				'description' => '',
 				'type' => 'select',
+				'class' => '',
 				'options' => static::get_billing_as_company_select_values(),
 			],
 			'billing_company' => $bf['billing_company'],
 		];
 		foreach ( static::get_additional_fields() as $key => $info ) {
-			$insert[ $key ] = [
+			$insert[ static::PREFIX . $key ] = [
 				'label' => $info['label'],
 				'description' => '',
 			];	
@@ -302,9 +304,9 @@ class Plugin {
 		}
 
 		$billing_as_company = static::get_meta( $order, static::BILLING_AS_COMPANY_KEY );
-		$company_vat_id = static::get_meta( $order, static::PREFIX . 'billing_company_vat_id' );
-		$company_id = static::get_meta( $order, static::PREFIX . 'billing_company_id' );
-		$company_tax_id = static::get_meta( $order, static::PREFIX . 'billing_company_tax_id' );
+		$company_vat_id = static::get_meta( $order, 'billing_company_vat_id' );
+		$company_id = static::get_meta( $order, 'billing_company_id' );
+		$company_tax_id = static::get_meta( $order, 'billing_company_tax_id' );
 
 		if ( '' === "$billing_as_company$company_vat_id$company_id$company_tax_id" ) {
 			// try fallback meta fields from SuperFaktura/Webikon Invoice plugin
@@ -330,7 +332,7 @@ class Plugin {
 	 * Get meta data (we can filter this later).
 	 */
 	protected static function get_meta( $data, $key ) {
-		$key = ( $data instanceof \WC_Order ? '_' : '' ) . $key;
+		$key = ( $data instanceof \WC_Order ? '_' : '' ) . static::PREFIX . $key;
 		return $data->get_meta( $key );
 	}
 
@@ -338,7 +340,7 @@ class Plugin {
 	 * Update meta data (we can filter this later).
 	 */
 	protected static function update_meta( $data, $key, $value ) {
-		$key = ( $data instanceof WC_Order ? '_' : '' ) . $key;
+		$key = ( $data instanceof \WC_Order ? '_' : '' ) . static::PREFIX . $key;
 		$data->update_meta_data( $key, $value );
 	}
 
@@ -347,21 +349,21 @@ class Plugin {
 	 */
 	protected static function get_additional_fields() {
 		return [
-			static::PREFIX . 'billing_company_vat_id' => [
+			'billing_company_vat_id' => [
 				'index' => 0,
 				'label' => __( 'VAT ID', 'wc-nastavenia-skcz' ),
 				'class' => 'form-row-wide',
 				'wrapper_class' => '_billing_company_field',
 				'priority' => 46,
 			],
-			static::PREFIX . 'billing_company_id' => [
+			'billing_company_id' => [
 				'index' => 1,
 				'label' => __( 'ID', 'wc-nastavenia-skcz' ),
 				'class' => 'form-row-first',
 				'wrapper_class' => '_billing_first_name_field',
 				'priority' => 47,
 			],				
-			static::PREFIX . 'billing_company_tax_id' => [
+			'billing_company_tax_id' => [
 				'index' => 2,
 				'label' => __( 'Tax ID', 'wc-nastavenia-skcz' ),
 				'class' => 'form-row-last',
