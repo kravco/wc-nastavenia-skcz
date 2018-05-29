@@ -105,15 +105,15 @@ class Plugin {
 	 */
 	public function save_order_billing_fields( $order, $data ) {
 		if ( empty( $data[ static::BILLING_AS_COMPANY_KEY ] ) ) {
-			$order->update_meta_data( '_' . static::BILLING_AS_COMPANY_KEY, '0' );
+			static::update_meta( $order, static::BILLING_AS_COMPANY_KEY, '0' );
 			foreach ( static::get_additional_fields() as $key => $info ) {
-				$order->update_meta_data( "_$key", '' );
+				static::update_meta( $order, $key, '' );
 			}
 			return;
 		}
-		$order->update_meta_data( '_' . static::BILLING_AS_COMPANY_KEY, '1' );
+		static::update_meta( $order, static::BILLING_AS_COMPANY_KEY, '1' );
 		foreach ( static::get_additional_fields() as $key => $info ) {
-			$order->update_meta_data( "_$key", $data[ $key ] );
+			static::update_meta( $order, $key, $data[ $key ] );
 		}
 	}
 
@@ -122,15 +122,15 @@ class Plugin {
 	 */
 	public function save_customer_billing_fields( $customer, $data ) {
 		if ( empty( $data[ static::BILLING_AS_COMPANY_KEY ] ) ) {
-			$customer->update_meta_data( static::BILLING_AS_COMPANY_KEY, '0' );
+			static::update_meta( $customer, static::BILLING_AS_COMPANY_KEY, '0' );
 			foreach ( static::get_additional_fields() as $key => $info ) {
-				$customer->update_meta_data( $key, '' );
+				static::update_meta( $customer, $key, '' );
 			}
 			return;
 		}
-		$customer->update_meta_data( static::BILLING_AS_COMPANY_KEY, '1' );
+		static::update_meta( $customer, static::BILLING_AS_COMPANY_KEY, '1' );
 		foreach ( static::get_additional_fields() as $key => $info ) {
-			$customer->update_meta_data( $key, $data[ $key ] );
+			static::update_meta( $customer, $key, $data[ $key ] );
 		}
 	}
 
@@ -171,11 +171,11 @@ class Plugin {
 	 * Add values for custom replacement for company information in billing address.
 	 */
 	public function filter_order_billing_address( $args, $order ) {
-		if ( $order->get_meta( '_' . static::BILLING_AS_COMPANY_KEY ) ) {
+		if ( static::get_meta( $order, static::BILLING_AS_COMPANY_KEY ) ) {
 			$country = $order->get_billing_country();
 			$additional_info = [];
 			foreach ( static::get_additional_fields() as $key => $info ) {
-				$value = $order->get_meta( "_$key" );
+				$value = static::get_meta( $order, $key );
 				if ( ! empty( $value ) ) {
 					$additional_info[] = static::get_additional_field_info( $country, $info, $value );
 				}
@@ -194,7 +194,7 @@ class Plugin {
 	 * Billing company information should not be displayed in shipping address.
 	 */
 	public function filter_order_shipping_address( $args, $order ) {
-		if ( ! $order->get_meta( '_' . static::BILLING_AS_COMPANY_KEY ) ) {
+		if ( ! static::get_meta( $order, static::BILLING_AS_COMPANY_KEY ) ) {
 			$args['company'] = '';
 		}
 		$args[ static::BILLING_AS_COMPANY_KEY ] = '';
@@ -207,11 +207,11 @@ class Plugin {
 	public function filter_user_account_address( $args, $user_id, $address_type ) {
 		$customer = new \WC_Customer( $user_id );
 		if ( 'billing' === $address_type ) {
-			if ( $customer->get_meta( static::BILLING_AS_COMPANY_KEY ) ) {
+			if ( static::get_meta( $customer, static::BILLING_AS_COMPANY_KEY ) ) {
 				$country = $customer->get_billing_country();
 				$additional_info = [];
 				foreach ( static::get_additional_fields() as $key => $info ) {
-					$value = $customer->get_meta( $key );
+					$value = static::get_meta( $customer, $key );
 					if ( ! empty( $value ) ) {
 						$additional_info[] = static::get_additional_field_info( $country, $info, $value );
 					}
@@ -224,7 +224,7 @@ class Plugin {
 			}
 		}
 		if ( 'shipping' === $address_type ) {
-			if ( ! $customer->get_meta( static::BILLING_AS_COMPANY_KEY ) ) {
+			if ( ! static::get_meta( $customer, static::BILLING_AS_COMPANY_KEY ) ) {
 				$args[ 'company' ] = '';
 			}
 			$args[ static::BILLING_AS_COMPANY_KEY ] = '';
@@ -299,10 +299,10 @@ class Plugin {
 			return null;
 		}
 
-		$billing_as_company = $order->get_meta( '_' . static::BILLING_AS_COMPANY_KEY );
-		$company_vat_id = $order->get_meta( '_' . static::PREFIX . 'billing_company_vat_id' );
-		$company_id = $order->get_meta( '_' . static::PREFIX . 'billing_company_id' );
-		$company_tax_id = $order->get_meta( '_' . static::PREFIX . 'billing_company_tax_id' );
+		$billing_as_company = static::get_meta( $order, static::BILLING_AS_COMPANY_KEY );
+		$company_vat_id = static::get_meta( $order, static::PREFIX . 'billing_company_vat_id' );
+		$company_id = static::get_meta( $order, static::PREFIX . 'billing_company_id' );
+		$company_tax_id = static::get_meta( $order, static::PREFIX . 'billing_company_tax_id' );
 
 		if ( '' === "$billing_as_company$company_vat_id$company_id$company_tax_id" ) {
 			// try fallback meta fields from SuperFaktura/Webikon Invoice plugin
@@ -322,6 +322,22 @@ class Plugin {
 		require_once __DIR__ . '/class-customer-details.php';
 
 		return new Customer_Details( $billing_as_company, $billing['company_vat_id'], $billing['company_id'], $billing['company_tax_id'] );
+	}
+
+	/**
+	 * Get meta data (we can filter this later).
+	 */
+	protected static function get_meta( $data, $key ) {
+		$key = ( $data instanceof \WC_Order ? '_' : '' ) . $key;
+		return $data->get_meta( $key );
+	}
+
+	/**
+	 * Update meta data (we can filter this later).
+	 */
+	protected static function update_meta( $data, $key, $value ) {
+		$key = ( $data instanceof WC_Order ? '_' : '' ) . $key;
+		$data->update_meta_data( $key, $value );
 	}
 
 	/**
