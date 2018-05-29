@@ -10,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Plugin {
 	const PREFIX = 'wc_nastavenia_skcz_';
 	const BILLING_AS_COMPANY_KEY = 'wc_nastavenia_skcz_billing_as_company';
+	const ADDRESS_FORMAT_KEY = 'wc_nastavenia_skcz_additional_fields';
 
 	private static $instance;
 	private static $localized_field_names = [
@@ -157,7 +158,7 @@ class Plugin {
 			if ( ! isset( $formats[ $code ] ) ) {
 				$formats[ $code ] = $formats['default'];
 			}
-			$formats[ $code ] .= "\n{" . static::BILLING_AS_COMPANY_KEY . "}";
+			$formats[ $code ] .= "\n{" . static::ADDRESS_FORMAT_KEY . "}";
 		}
 		return $formats;
 	}
@@ -166,8 +167,8 @@ class Plugin {
 	 * Add values for custom replacement for company information?
 	 */
 	public function filter_billing_address_replacements( $replacements, $args ) {
-		if ( isset( $args[ static::BILLING_AS_COMPANY_KEY ] ) ) {
-			$replacements[ '{' . static::BILLING_AS_COMPANY_KEY . '}' ] = $args[ static::BILLING_AS_COMPANY_KEY ];
+		if ( isset( $args[ static::ADDRESS_FORMAT_KEY ] ) ) {
+			$replacements[ '{' . static::ADDRESS_FORMAT_KEY . '}' ] = $args[ static::ADDRESS_FORMAT_KEY ];
 		}
 		return $replacements;
 	}
@@ -183,11 +184,11 @@ class Plugin {
 				$value = static::get_meta( $order, $key );
 				$additional_info .= static::get_additional_field_info( $country, $info, $value );
 			}
-			$args[ static::BILLING_AS_COMPANY_KEY ] = trim( $additional_info );
+			$args[ static::ADDRESS_FORMAT_KEY ] = trim( $additional_info );
 		}
 		else {
 			$args['company'] = '';
-			$args[ static::BILLING_AS_COMPANY_KEY ] = '';
+			$args[ static::ADDRESS_FORMAT_KEY ] = '';
 		}
 		return $args;
 	}
@@ -200,7 +201,7 @@ class Plugin {
 		if ( ! static::get_meta( $order, static::BILLING_AS_COMPANY_KEY ) ) {
 			$args['company'] = '';
 		}
-		$args[ static::BILLING_AS_COMPANY_KEY ] = '';
+		$args[ static::ADDRESS_FORMAT_KEY ] = '';
 		return $args;
 	}
 
@@ -217,18 +218,18 @@ class Plugin {
 					$value = static::get_meta( $customer, $key );
 					$additional_info .= static::get_additional_field_info( $country, $info, $value );
 				}
-				$args[ static::BILLING_AS_COMPANY_KEY ] = trim( $additional_info );
+				$args[ static::ADDRESS_FORMAT_KEY ] = trim( $additional_info );
 			}
 			else {
 				$args[ 'company' ] = '';
-				$args[ static::BILLING_AS_COMPANY_KEY ] = '';
+				$args[ static::ADDRESS_FORMAT_KEY ] = '';
 			}
 		}
 		if ( 'shipping' === $address_type ) {
 			if ( ! static::get_meta( $customer, static::BILLING_AS_COMPANY_KEY ) ) {
 				$args[ 'company' ] = '';
 			}
-			$args[ static::BILLING_AS_COMPANY_KEY ] = '';
+			$args[ static::ADDRESS_FORMAT_KEY ] = '';
 		}
 		return $args;
 	}
