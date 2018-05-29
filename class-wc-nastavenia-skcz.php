@@ -260,7 +260,7 @@ class Plugin {
 				'label' => $info['label'],
 				'wrapper_class' => $info['wrapper_class'],
 				'show' => false,
-			];	
+			];
 		}
 		return static::associative_array_insert( $fields, 'company', $insert );
 	}
