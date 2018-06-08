@@ -13,7 +13,7 @@ Tento plugin si kladie za cieľ uľahčiť život e-shopom na Slovensku a v Čes
 
 == Description ==
 
-Plugin je stále vo vývoji, rozhodne nie je dokončený a je aktuálne v štádiu beta (tzn. všetko by malo fungovať, možno až na pár prehliadnutých chýb). Budem veľmi vďačný za akúkoľvek spätnú väzbu, pripomienky i návrhy na vylepšenie. Majte na pamäti, že cieľom pluginu je poskytovať funkcionalitu, ktorú potrebuje takmer každý e-shop, nie takú, ktorá sa zíde len špecifickej skupine.
+Plugin je stále vo vývoji, rozhodne nie je dokončený a je aktuálne v štádiu beta (tzn. všetko by malo fungovať, možno až na pár prehliadnutých chýb). Budem veľmi vďačný za akúkoľvek spätnú väzbu, pripomienky i návrhy na vylepšenie – prosím, píšte do fóra k tomuto pluginu. Majte na pamäti, že cieľom pluginu je poskytovať funkcionalitu, ktorú potrebuje takmer každý e-shop, nie takú, ktorá sa zíde len špecifickej skupine.
 
 V tomto momente má plugin len jedinú funkcionalitu: Umožniť nákup zákazníkov na firmu, spolu so zadaním firemných údajov (IČO, DIČ, IČ DPH). Postup vyzerá tak, že štandardne sú políčka pre nákup na firmu schované a zobrazia sa až vtedy, ak si zákazník zvolí nákup na firmu. Kvôli ďalšej možnosti rozšírenia je v pokladni vymenené poradie výberu krajiny a políčok pre firmu, keďže v medzinárodnom e-shope je logické najprv vybrať krajinu a až následne zadať údaje o firme – tie sú totiž špecifické pre každú krajinu. Problém to robí najmä pri nákupe zo Slovenska do Česka a naopak, keďže v oboch krajinách poznáme pole DIČ, avšak v každej krajine znamená niečo iné (na Slovensku je to interné identifikačné číslo daňového úradu, v Česku je to názov pre celoeurópske registračné číslo pre DPH – toto číslo sa na Slovensku nazýva IČ DPH). Plugin tento problém rieši tak, že zákazníkom e-shopu zobrazí polia vždy s názvom, ktorý sa používa v krajine zvolenej v pokladni. Naopak, v administrácii sa používa názov polí podľa nastaveného jazyka, je teda naprieč administráciou jednotný (aj pre objednávky z rôznych krajín).
 
@@ -34,7 +34,8 @@ Je pravdepodobné, že pluginy nie sú kompatibilné. Skúste zistiť, v čom sp
 == Screenshots ==
 
 1. Pokladňa pri nákupe fyzickej osoby.
-1. Pokladňa pri nákupe na firmu – zobrazia sa dodatočné políčka.
+1. Pokladňa pri nákupe na firmu SK – zobrazia sa dodatočné políčka.
+1. Pokladňa pri nákupe na firmu CZ – políčka majú správne názvy.
 1. Stránka s informáciami o objednávke a poďakovaním.
 1. Zobrazenie fakturačnej adresy na stránke môj účet
 1. Úprava polí na stránke môj účet
@@ -71,4 +72,4 @@ Je pravdepodobné, že pluginy nie sú kompatibilné. Skúste zistiť, v čom sp
 
 == Upgrade Notice ==
 
-WooCommerce verzia 3.4.0 zaviedla nekompatibilitu s naším pluginom, ktorá znamená, že nie je možné upraviť políčka v administrácii objednávky. Nekompatibilita by mala byť opravená vo verzii 3.4.3, následne po overení vydáme kompatibilnú verziu.
+WooCommerce verzia 3.4.0 zaviedla nekompatibilitu s naším pluginom, ktorá znamená, že nie je možné upraviť políčka v administrácii objednávky. Iná funkcionalita by mala byť bez problémov funkčná. Úprava, ktorá opäť umožní kompatibilitu by mala byť vydaná vo verzii 3.4.3, následne po overení funkčnosti vydáme plne kompatibilnú verziu.
