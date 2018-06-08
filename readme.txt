@@ -2,6 +2,8 @@
 Contributors: webikon, kravco
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HJMDR4AEQNDME
 Tags: checkout, company, vat, slovakia, czech-republic, european-union
+Requires at least: 4.8
+Tested up to: 4.9.6
 Requires PHP: 5.5
 Stable tag: trunk
 License: GPL2 or later
@@ -41,6 +43,9 @@ Je pravdepodobné, že pluginy nie sú kompatibilné. Skúste zistiť, v čom sp
 1. Úprava polí v profile používateľa
 
 == Changelog ==
+
+= 2.0.1 =
+* Opravené deklarovanie podpory WordPress verzií
 
 = 2.0 =
 * Opravenie mätúceho zobrazovania slovenského a českého IČ DPH/DIČ (pri zobrazení adresy pri nákupe /frontend/ sa zobrazuje vždy názov poľa tak ako sa volá v zvolenej krajine, pri zobrazení v administrácii /backend/ sa použije názov políčka v jazyku, ktorý má nastavený aktuálny používateľ)
