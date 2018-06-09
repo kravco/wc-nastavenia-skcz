@@ -11,7 +11,7 @@ jQuery( function( $ ) {
 
 	$( '#billing_country' ).change( function() {
 		var country = $( this ).val();
-		if ( ! country in wc_nastavenia_skcz_localized_field_names ) {
+		if ( ! ( country in wc_nastavenia_skcz_localized_field_names ) ) {
 			country = 'other';
 		}
 		var names = wc_nastavenia_skcz_localized_field_names[ country ];

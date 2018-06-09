@@ -45,6 +45,9 @@ Je pravdepodobné, že pluginy nie sú kompatibilné. Skúste zistiť, v čom sp
 
 == Changelog ==
 
+= 2.0.2 =
+* Opravenie chyby v javascripte
+
 = 2.0.1 =
 * Opravené deklarovanie podpory WordPress verzií
 

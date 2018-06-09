@@ -4,7 +4,7 @@
 Plugin Name: Nastavenia SK/CZ pre WooCommerce
 Plugin URI: https://wordpress.org/plugins/wc-nastavenia-skcz
 Description: Nastavenia WooCommerce pre Slovensko a Česko
-Version: 2.0.1
+Version: 2.0.2
 Author: Webikon (Matej Kravjar)
 Author URI: https://webikon.sk
 License: GPLv2
